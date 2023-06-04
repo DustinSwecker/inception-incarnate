@@ -88,7 +88,7 @@ const possibleReactions = [
 const getRandomArrItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 //create objectids so that we can populate fields rather than need to do a get pull
-let objectIDS = []
+let objectIDS = [];
 const createObjectIDS = () => {
   objectIDS = [];  
   for(i=0; i < 15; i++) {
@@ -115,8 +115,23 @@ const getRandomUsername = () => { return `${getRandomArrItem(userstarts)}${getRa
 //get a random email
 const getRandomEmail = () => getRandomUsername() + '@gmail.com';
 
+const getThoughtObjectForUser = async () => {
+  let getThoughts = await Thought.where('username', this.username)
+  const gottenThoughts = getThoughts.map((v)=> v._id);
+  return gottenThoughts;
+}
+
+const unbelieveableHowPromisesAreSetup = await getThoughtObjectForUser();
+// .then(function(x) {
+//   return x;
+// }
+// )
+
+console.log(unbelieveableHowPromisesAreSetup())
+
+
 //function to create user
-const getRandomUsers = () => {
+const getRandomUsers = async () => {
   getRandomFriends();
   let results = [];
   
@@ -126,7 +141,7 @@ const getRandomUsers = () => {
       _id: objectIDS[i],
       username: getRandomUsername(),
       email: getRandomEmail(),
-      // thoughts: await Thought.find().where({ username: this.username }).get('_id', Schema.Types.ObjectId),
+      thoughts: unbelieveableHowPromisesAreSetup(),
       friends: [...randomFriends],
     });
   };
@@ -150,10 +165,8 @@ const getRandomReactions = (int) => {
 
 //create thoughts function
 const getRandomThoughts = () => {
-  let results;
-  const randomThoughts = Math.floor(Math.random(thoughtText.length));
-  
-    results = {
+  let results = {
+      _id: new mongoose.Types.ObjectId(),
       thoughtText: getRandomArrItem(thoughtText),
       createdAt: Math.floor(Math.random() * Date.now()),
       username: getRandomUsername(),
