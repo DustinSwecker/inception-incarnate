@@ -1,8 +1,7 @@
 const { Schema, model } = require('mongoose');
-import { isEmail } from 'validator;'
-const Thought = require('./Thought');
+const { isEmail } =require('validator');
 
-//User model schema
+//Users model schema
 const userSchema = new Schema(
   {
     username: {
@@ -29,7 +28,7 @@ const userSchema = new Schema(
     friends: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'user',
+        ref: 'users',
       },
     ],
   },
@@ -52,6 +51,6 @@ userSchema
   })
 
 // Initialize the model and export
-const User = model('user', userSchema);
+const Users = model('users', userSchema);
 
-module.exports = User;
+module.exports = Users;
