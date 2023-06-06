@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
-const { isEmail } =require('validator');
+const { isEmail } = require('validator');
 
-//Users model schema
+//User model schema
 const userSchema = new Schema(
   {
     username: {
@@ -15,7 +15,7 @@ const userSchema = new Schema(
       required: [true, 'Email required'],
       unique: true,
       validate: {
-        //solution borrowed from https://stackoverflow.com/questions/18022365/mongoose-validate-email-syntax easier than match: I think
+        //solution borrowed from https://stackoverflow.com/questions/18022365/mongoose-validate-email-syntax 
         validator: isEmail,
         message: 'Invalid email'
       },
@@ -28,7 +28,7 @@ const userSchema = new Schema(
     friends: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'user',
       },
     ],
   },
@@ -51,6 +51,6 @@ userSchema
   })
 
 // Initialize the model and export
-const Users = model('users', userSchema);
+const User = model('user', userSchema);
 
-module.exports = Users;
+module.exports = User;
