@@ -263,5 +263,5 @@ const thoughtData = [
 ]
 
 
-// Export the dat for use in seed.js
+// Export the data for use in seed.js
 module.exports = { userData, thoughtData };

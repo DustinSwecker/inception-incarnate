@@ -18,7 +18,8 @@ const userSchema = new Schema(
         //solution borrowed from https://stackoverflow.com/questions/18022365/mongoose-validate-email-syntax 
         validator: isEmail,
         message: 'Invalid email'
-      },
+      }
+    },
     thoughts: [
         {
           type: Schema.Types.ObjectId,
@@ -32,20 +33,17 @@ const userSchema = new Schema(
       },
     ],
   },
-  },
   {
     //include virtuals
     toJSON: {
       virtuals: true,
     },
     id: false,
-  }
-);
+ });
 
 // Create a virtual property `friendCount` that gets the number of friends a user has
 userSchema
   .virtual('friendCount')
-  
   .get(function () {
     return this.friends.length;
   })

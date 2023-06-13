@@ -13,8 +13,7 @@ const thoughtSchema = new Schema(
     },
     createdAt: {
       type: Date,
-      default: Date.now,
-      get: getLocalDate,
+      default: Date.now(),
     },
     username: {
       type: String,
@@ -25,15 +24,12 @@ const thoughtSchema = new Schema(
   {
     toJSON: {
       virtuals: true,
+      getters:true,
+      minimize: false
     },
     id: false,
   }
 );
-
-function getLocalDate () {
-  const val = this.get('createdAt', Date);
-  return (val.getMonth() + 1) + "/" + val.getDate() + "/" + val.getFullYear();
-}
 
 // Create a virtual property `reactionCount` that gets the amount of reactions per thought
 thoughtSchema
