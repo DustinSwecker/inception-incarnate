@@ -8,7 +8,7 @@ const getUsers = async (req, res) => {
         res.json(userData);
 
     } catch (err) {
-        
+
         res.status(500).json(err);
     }
 };
@@ -47,12 +47,12 @@ const deleteUser = async (req, res) => {
 
         const deleteUserData = await User.findOneAndDelete({_id: req.params.userId});
 
-        if (!deleteUserData) {
+        if (! deleteUserData) {
             res.status(404).json({message: 'Oops! No User with that ID'});
         }
         res.json({message: 'User deleted'});
     } catch (err) {
-        
+
         res.status(500).json(err);
     }
 }
@@ -67,13 +67,60 @@ const updateUser = async (req, res) => {
             runValidators: true,
             new: true
         });
-        if (!updateUserData) {
+        if (! updateUserData) {
             res.status(404).json({message: 'no user with that ID'});
         }
         res.json(updateUserData)
     } catch (err) {
-        
+
         res.status(500).json(err);
+    }
+}
+
+const addFriend = async (req, res) => {
+    try {
+        const newFriend = await User.findOneAndUpdate({
+            _id: req.params.userId
+        }, {
+            $addToSet: {
+                friends: req.body
+            }
+        }, {
+            runValidators: true,
+            new: true
+        });
+
+        if (! newFriend) {
+            return res.status(404).json({message: 'No User with that ID!'})
+        }
+        res.json(newFriend);
+    } catch (err) {
+        console.log(err)
+        res.status(500).json(err);
+    }
+}
+
+const removeFriend = async (req, res) => {
+    try {
+        const delFriend = await User.findOneAndUpdate({
+            _id: req.params.userId
+        }, {
+            pull: {
+                friends: {
+                    id: req.params.friendId
+                }
+            }
+        }, {
+            runValidators: true,
+            new: true
+        });
+        if (!delFriend) {
+            res.status(404).json({message: 'No friend with that id'})
+        }
+        res.json({message: 'friend deleted'})
+    } catch (err) {
+        console.log(err)
+        res.status(500).json(err)
     }
 }
 
@@ -82,5 +129,7 @@ module.exports = {
     getSingleUser,
     newUser,
     deleteUser,
-    updateUser
+    updateUser,
+    addFriend,
+    removeFriend
 }
