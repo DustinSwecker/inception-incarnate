@@ -67,10 +67,11 @@ const deleteThought = async (req, res) => {
         if (! deleteThoughtData) {
             res.status(404).json({message: 'No Thought with that ID'});
         }
-        res.json({message: 'Thought deleted'})
+        return res.json({message: 'Thought deleted'})
+
     } catch (err) {
-        console.log(err)
-        res.status(500).json(err)
+        
+        return res.status(500).json(err)
     }
 }
 
@@ -90,7 +91,7 @@ const addReaction = async (req, res) => {
         if (! reaction) {
             return res.status(404).json({message: 'No thought with this id'})
         }
-        res.json(reaction);
+        return res.json(reaction);
     } catch (err) {
         console.log(err)
         res.status(500).json(err)
