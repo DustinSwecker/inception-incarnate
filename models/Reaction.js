@@ -17,21 +17,17 @@ const reactionSchema = new Schema(
     },
     createdAt: {
       type: Date,
-      default: Date.now,
-      get: getLocalDate,
+      default: Date.now(),
+      
     },
   },
   {
     toJSON: {
       getters: true,
+      minimize: false
     },
     id: false,
   }
 );
-
-function getLocalDate () {
-  const val = this.get('createdAt', Date);
-  return (val.getMonth() + 1) + "/" + val.getDate() + "/" + val.getFullYear();
-}
 
 module.exports = reactionSchema;

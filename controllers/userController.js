@@ -1,48 +1,86 @@
 const User = require('../models/User');
 
+
 const getUsers = async (req, res) => {
     try {
         const userData = await User.find();
-        console.log(userData);
+
         res.json(userData);
 
-    }
-    catch (err) {
+    } catch (err) {
+        
         res.status(500).json(err);
+    }
+};
+
+const getSingleUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId).select('-__v');
+
+
+        if (! user) {
+            return res.status(404).json({message: 'No user with that id'});
         }
+        res.json(user);
+    } catch (err) {
+
+        res.status(500).json(err);
+    }
 }
 
-module.exports = { getUsers } 
-// {
-//   async getUsers(req, res) {
-//     try {
-//       const users = await User.find();
-//       res.json(users);
-//     } catch (err) {
-//       res.status(500).json(err);
-//     }
-//   },
-//   async getSingleUser(req, res) {
-//     try {
-//       const user = await User.findOne({ _id: req.params })
-//         .select('-__v');
+const newUser = async (req, res) => {
+    try {
+        const newUserData = await User.create(req.body);
 
-//       if (!user) {
-//         return res.status(404).json({ message: 'No user with that ID' });
-//       }
+        if (!req.body) {
+            return res.status(500).json({message: 'Please fill out all required data!'})
+        }
+        res.json(newUserData);
+    } catch (err) {
+        console.log(err)
+        res.status(500).json(err);
+    }
+}
 
-//       res.json(user);
-//     } catch (err) {
-//       res.status(500).json(err);
-//     }
-//   },
-//   // create a new user
-//   async createUser(req, res) {
-//     try {
-//       const dbUserData = await User.create(req.body);
-//       res.json(dbUserData);
-//     } catch (err) {
-//       res.status(500).json(err);
-//     }
-//   },
-// };
+const deleteUser = async (req, res) => {
+    try {
+
+        const deleteUserData = await User.findOneAndDelete({_id: req.params.userId});
+
+        if (!deleteUserData) {
+            res.status(404).json({message: 'Oops! No User with that ID'});
+        }
+        res.json({message: 'User deleted'});
+    } catch (err) {
+        
+        res.status(500).json(err);
+    }
+}
+
+const updateUser = async (req, res) => {
+    try {
+        const updateUserData = await User.findOneAndUpdate({
+            _id: req.params.userId
+        }, {
+            $set: req.body
+        }, {
+            runValidators: true,
+            new: true
+        });
+        if (!updateUserData) {
+            res.status(404).json({message: 'no user with that ID'});
+        }
+        res.json(updateUserData)
+    } catch (err) {
+        
+        res.status(500).json(err);
+    }
+}
+
+module.exports = {
+    getUsers,
+    getSingleUser,
+    newUser,
+    deleteUser,
+    updateUser
+}
